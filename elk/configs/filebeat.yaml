@@ -1,0 +1,9 @@
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - /logs/out.log
+    exclude_files: ['kibana.log']
+
+output.logstash:
+  hosts: ["logstash:5044"] 

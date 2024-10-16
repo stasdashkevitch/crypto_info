@@ -26,7 +26,7 @@ func NewConfig() *Config {
 		l.Info("start parsing config")
 		instance = &Config{}
 
-		err := cleanenv.ReadConfig("../../config.yaml", instance)
+		err := cleanenv.ReadConfig("config.yaml", instance)
 		if err != nil {
 			help, _ := cleanenv.GetDescription(instance, nil)
 			l.Error(help)

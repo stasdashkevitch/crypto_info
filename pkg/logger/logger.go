@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	logFilePath = "../../logs/out.log"
+	logFilePath = "logs/out.log"
 )
 
 var loggerInstance *zap.SugaredLogger

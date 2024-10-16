@@ -1,9 +1,10 @@
 module github.com/stasdashkevitch/crypto_info
 
-go 1.23.0
+go 1.23
 
 require (
 	github.com/BurntSushi/toml v1.4.0 // indirect
+	github.com/elastic/go-elasticsearch v0.0.0 // indirect
 	github.com/ilyakaznacheev/cleanenv v1.5.0 // indirect
 	github.com/joho/godotenv v1.5.1 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
