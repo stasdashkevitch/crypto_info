@@ -2,27 +2,38 @@ package logger
 
 import (
 	"os"
+	"sync"
 
 	"go.uber.org/zap"
 )
 
-func NewLogger() *zap.Logger {
-	config := getConfig()
-	logger := zap.Must(config.Build())
-	defer logger.Sync()
+const (
+	logFilePath = "../../logs/out.log"
+)
 
-	logger.Sugar()
+var loggerInstance *zap.SugaredLogger
+var once sync.Once
 
-	return logger
+func GetLogger() *zap.SugaredLogger {
+	once.Do(func() {
+		config := getConfig()
+		logger := zap.Must(config.Build())
+
+		loggerInstance = logger.Sugar()
+	})
+
+	return loggerInstance
 }
 
 func getConfig() *zap.Config {
-	config := zap.NewDevelopmentConfig()
-	config.Level = zap.NewAtomicLevelAt(zap.DebugLevel)
-
+	var config zap.Config
 	if os.Getenv("CRYPTO_INFO_ENV") == "prod" {
 		config = zap.NewProductionConfig()
+		config.OutputPaths = []string{"stdout", logFilePath}
 		config.Level = zap.NewAtomicLevelAt(zap.InfoLevel)
+	} else {
+		config = zap.NewDevelopmentConfig()
+		config.Level = zap.NewAtomicLevelAt(zap.DebugLevel)
 	}
 
 	return &config

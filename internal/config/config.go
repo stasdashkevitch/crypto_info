@@ -21,7 +21,7 @@ var instance *Config
 var once sync.Once
 
 func NewConfig() *Config {
-	l := logger.NewLogger()
+	l := logger.GetLogger()
 	once.Do(func() {
 		l.Info("start parsing config")
 		instance = &Config{}

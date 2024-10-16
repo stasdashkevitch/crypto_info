@@ -8,7 +8,9 @@ import (
 )
 
 func main() {
-	l := logger.NewLogger()
+	l := logger.GetLogger()
+	defer l.Sync()
+
 	l.Info("start")
 	cfg := config.NewConfig()
 	fmt.Println(cfg.Env)
