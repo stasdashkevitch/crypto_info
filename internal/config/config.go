@@ -10,11 +10,20 @@ import (
 type Config struct {
 	Env    string `yaml:"env" env-default:"local"`
 	Server struct {
-		BindIP       string `yaml:"bind_ip" env-default:"0.0.0.0"`
-		Port         string `yaml:"port" env-default:"8080"`
+		IdleTimeout  int    `yaml:"idle_timeout" env-default:"100"`
+		Port         string `yaml:"port" env-default:":8080"`
 		ReadTimeout  int    `yaml:"read_timeout" env-default:"5"`
 		WriteTimeout int    `yaml:"write_timeout" env-default:"5"`
 	} `yaml:"server"`
+	DB struct {
+		Host     string `yaml:"host" env-default:"localhost"`
+		Port     int    `yaml:"port" env-default:"5432"`
+		User     string `yaml:"user" env-default:"postgres"`
+		Password string `yaml:"password" env-defaul:"123456"`
+		DBName   string `yaml:"dbname" env-default:"cryptoInfo"`
+		SSLMode  string `yaml:"sslmode" env-default:"disable"`
+		Timezone string `yaml:"timezone" env-default:"Europe/Minsk"`
+	} `yaml:"db"`
 }
 
 var instance *Config

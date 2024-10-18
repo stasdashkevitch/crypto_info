@@ -1,22 +1,23 @@
 package main
 
 import (
-	"fmt"
-
-	"github.com/joho/godotenv"
 	"github.com/stasdashkevitch/crypto_info/internal/config"
+	v1 "github.com/stasdashkevitch/crypto_info/internal/server/http/v1"
+	"github.com/stasdashkevitch/crypto_info/pkg/database"
 	"github.com/stasdashkevitch/crypto_info/pkg/logger"
+	"github.com/stasdashkevitch/crypto_info/pkg/util/env"
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		panic(err)
-	}
+	env.LoadEnv()
+
 	l := logger.GetLogger()
 	defer l.Sync()
 
-	l.Info("start")
 	cfg := config.NewConfig()
-	fmt.Println(cfg.Env)
+	l.Info(cfg.Server.Port)
+
+	db := database.NewPostgresDatabase(cfg)
+
+	v1.NewStandartHTTPServer(cfg, l, db).Start()
 }
