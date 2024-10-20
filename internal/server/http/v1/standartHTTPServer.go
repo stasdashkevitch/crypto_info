@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/stasdashkevitch/crypto_info/internal/config"
-	"github.com/stasdashkevitch/crypto_info/pkg/database"
+	"github.com/stasdashkevitch/crypto_info/internal/database"
 	"go.uber.org/zap"
 )
 

@@ -7,6 +7,7 @@ import (
 
 	_ "github.com/lib/pq"
 	"github.com/stasdashkevitch/crypto_info/internal/config"
+	"github.com/stasdashkevitch/crypto_info/internal/database"
 )
 
 type postgresDatabase struct {
@@ -18,7 +19,7 @@ var (
 	dbInstance *postgresDatabase
 )
 
-func NewPostgresDatabase(cfg *config.Config) Database {
+func NewPostgresDatabase(cfg *config.Config) database.Database {
 	once.Do(func() {
 		dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=%s TimeZone=%s",
 			cfg.DB.Host,

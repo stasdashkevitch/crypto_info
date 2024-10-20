@@ -2,9 +2,9 @@ package main
 
 import (
 	"github.com/stasdashkevitch/crypto_info/internal/config"
+	"github.com/stasdashkevitch/crypto_info/internal/database"
+	"github.com/stasdashkevitch/crypto_info/internal/logger"
 	v1 "github.com/stasdashkevitch/crypto_info/internal/server/http/v1"
-	"github.com/stasdashkevitch/crypto_info/pkg/database"
-	"github.com/stasdashkevitch/crypto_info/pkg/logger"
 	"github.com/stasdashkevitch/crypto_info/pkg/util/env"
 )
 
