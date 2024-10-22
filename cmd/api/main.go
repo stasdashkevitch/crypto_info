@@ -2,10 +2,10 @@ package main
 
 import (
 	"github.com/stasdashkevitch/crypto_info/internal/config"
-	"github.com/stasdashkevitch/crypto_info/internal/database"
-	"github.com/stasdashkevitch/crypto_info/internal/logger"
+	database "github.com/stasdashkevitch/crypto_info/internal/database/postgres"
 	v1 "github.com/stasdashkevitch/crypto_info/internal/server/http/v1"
-	"github.com/stasdashkevitch/crypto_info/pkg/util/env"
+	"github.com/stasdashkevitch/crypto_info/pkg/env"
+	"github.com/stasdashkevitch/crypto_info/pkg/logger"
 )
 
 func main() {
@@ -13,6 +13,7 @@ func main() {
 
 	l := logger.GetLogger()
 	defer l.Sync()
+	l.Info("create config")
 
 	cfg := config.NewConfig()
 	l.Info(cfg.Server.Port)
@@ -20,4 +21,5 @@ func main() {
 	db := database.NewPostgresDatabase(cfg)
 
 	v1.NewStandartHTTPServer(cfg, l, db).Start()
+
 }

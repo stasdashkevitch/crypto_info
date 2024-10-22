@@ -7,8 +7,12 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/stasdashkevitch/crypto_info/internal/adapters/controller/http/v1/standart"
+	"github.com/stasdashkevitch/crypto_info/internal/adapters/repository/postgres"
 	"github.com/stasdashkevitch/crypto_info/internal/config"
 	"github.com/stasdashkevitch/crypto_info/internal/database"
+	"github.com/stasdashkevitch/crypto_info/internal/usecase"
+	"github.com/stasdashkevitch/crypto_info/internal/usecase/auth"
 	"go.uber.org/zap"
 )
 
@@ -43,8 +47,17 @@ func (s *standartHTTPServer) Start() {
 	s.server.Shutdown(tc)
 }
 
+func (s *standartHTTPServer) getServer() *http.Handler {
+	return &s.server.Handler
+}
+
 func NewStandartHTTPServer(cfg *config.Config, l *zap.SugaredLogger, db database.Database) Server {
+	l.Info("get routes")
 	sm := http.NewServeMux()
+
+	regisеringRoute(sm, l, db)
+
+	l.Info("all routes and return")
 	s := &http.Server{
 		Handler:      sm,
 		Addr:         cfg.Server.Port,
@@ -59,4 +72,18 @@ func NewStandartHTTPServer(cfg *config.Config, l *zap.SugaredLogger, db database
 		cfg:    cfg,
 		l:      l,
 	}
+}
+
+func regisеringRoute(sm *http.ServeMux, l *zap.SugaredLogger, db database.Database) {
+	l.Info("reg")
+	userRepository := postgres.NewUserPostgresRepository(db)
+
+	// login route
+	auth := auth.NewJWTAuth()
+	loginUsecase := usecase.NewLoginService(auth, userRepository)
+	standart.NewLoginHandler(sm, l, *loginUsecase)
+
+	// registration route
+	registrationUsecase := usecase.NewRegistrationUsecase(userRepository)
+	standart.NewRegistrationHandler(sm, l, *registrationUsecase)
 }

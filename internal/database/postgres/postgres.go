@@ -30,9 +30,21 @@ func NewPostgresDatabase(cfg *config.Config) database.Database {
 			cfg.DB.SSLMode,
 			cfg.DB.Timezone,
 		)
+		fmt.Print(dsn)
 
 		db, err := sql.Open("postgres", dsn)
 
+		if err != nil {
+			panic(err)
+		}
+
+		_, err = db.Exec(`CREATE TABLE IF NOT EXISTS users (
+    id UUID PRIMARY KEY, 
+    username TEXT NOT NULL, 
+    email TEXT UNIQUE NOT NULL, 
+    password_hash TEXT NOT NULL, 
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+)`)
 		if err != nil {
 			panic(err)
 		}

@@ -2,16 +2,16 @@
 
 env: prod
 server:
-  port: :8080
+  port: 0.0.0.0:8080
   read_timeout: 5
   write_timeout: 4
   idle_timeout: 100
 db:
   host: localhost
   port: 5432
-  user: postgres
+  user: crypto_info
   password: 123456
-  dbname: cryptoInfo
+  dbname: crypto_info
   sslmode: disable
   timezone: Europe/Minsk
 
