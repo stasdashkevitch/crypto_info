@@ -7,7 +7,7 @@ server:
   write_timeout: 4
   idle_timeout: 100
 db:
-  host: localhost
+  host: postgres
   port: 5432
   user: crypto_info
   password: 123456
