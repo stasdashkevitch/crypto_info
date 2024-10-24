@@ -17,13 +17,19 @@ type Config struct {
 	} `yaml:"server"`
 	DB struct {
 		Host     string `yaml:"host" env-default:"localhost"`
-		Port     int    `yaml:"port" env-default:"5432"`
+		Port     string `yaml:"port" env-default:"5432"`
 		User     string `yaml:"user" env-default:"postgres"`
 		Password string `yaml:"password" env-defaul:"123456"`
 		DBName   string `yaml:"dbname" env-default:"crypto_info"`
 		SSLMode  string `yaml:"sslmode" env-default:"disable"`
 		Timezone string `yaml:"timezone" env-default:"Europe/Minsk"`
 	} `yaml:"db"`
+	Cache struct {
+		Host     string `yaml:"host" env-default:"localhost"`
+		Port     string `yaml:"port" env-default:"6379"`
+		Password string `yaml:"password" env-default:"123456"`
+		DB       int    `yaml:"db" env-default:"0"`
+	} `yaml:"cache"`
 }
 
 var instance *Config

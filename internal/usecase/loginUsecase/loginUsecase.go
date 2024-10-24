@@ -1,4 +1,4 @@
-package usecase
+package loginusecase
 
 import (
 	"errors"
@@ -9,27 +9,27 @@ import (
 	"github.com/stasdashkevitch/crypto_info/pkg/password"
 )
 
-type LoginServis struct {
+type LoginUsecase struct {
 	auth       auth.Auth
 	repository repository.UserRepository
 }
 
-func NewLoginService(auth auth.Auth, repository repository.UserRepository) *LoginServis {
-	return &LoginServis{
+func NewLoginUsecase(auth auth.Auth, repository repository.UserRepository) *LoginUsecase {
+	return &LoginUsecase{
 		auth:       auth,
 		repository: repository,
 	}
 }
 
-func (s *LoginServis) Login(dto dtos.LoginUserDTO) (string, error) {
+func (s *LoginUsecase) Login(dto dtos.LoginUserDTO) (string, error) {
 	user, err := s.repository.GetByEmail(dto.Email)
 
 	if err != nil || user == nil {
-		return "", err
+		return "", errors.New("User with this email does not exists")
 	}
 
 	if err := password.ValidatePassword(user.PasswordHash, dto.Password); err != nil {
-		return "", errors.New("invalid passsword")
+		return "", errors.New("Invalid password")
 	}
 
 	token, err := s.auth.GenerateToken(user.ID)

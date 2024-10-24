@@ -5,28 +5,31 @@ import (
 	"net/http"
 
 	"github.com/stasdashkevitch/crypto_info/internal/dtos"
-	"github.com/stasdashkevitch/crypto_info/internal/usecase"
+	loginusecase "github.com/stasdashkevitch/crypto_info/internal/usecase/loginUsecase"
 	"go.uber.org/zap"
 )
 
 type loginHandler struct {
-	usecase usecase.LoginServis
+	usecase loginusecase.LoginUsecase
 	logger  *zap.SugaredLogger
 }
 
-func NewLoginHandler(handler *http.ServeMux, logger *zap.SugaredLogger, useusecase usecase.LoginServis) {
+func NewLoginHandler(handler *http.ServeMux, logger *zap.SugaredLogger, usecase loginusecase.LoginUsecase) {
 	h := &loginHandler{
-		usecase: useusecase,
+		usecase: usecase,
 		logger:  logger,
 	}
 	handler.HandleFunc("POST /login", h.Login)
 }
 
 func (h *loginHandler) Login(w http.ResponseWriter, r *http.Request) {
-	h.logger.Info("login")
+	h.logger.Infow("Recieved request: ",
+		"method", r.Method,
+		"url", r.URL)
 	var req dtos.LoginUserDTO
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, "invalid input", http.StatusBadRequest)
+		h.logger.Error("Invalid input: ", err)
+		http.Error(w, "Invalid input", http.StatusBadRequest)
 		return
 	}
 
@@ -35,7 +38,8 @@ func (h *loginHandler) Login(w http.ResponseWriter, r *http.Request) {
 	resp, err := h.usecase.Login(req)
 
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
+		h.logger.Error("Failed login attempt: ", err)
+		http.Error(w, "Failed to login", http.StatusUnauthorized)
 		return
 	}
 

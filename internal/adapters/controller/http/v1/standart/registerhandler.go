@@ -5,16 +5,16 @@ import (
 	"net/http"
 
 	"github.com/stasdashkevitch/crypto_info/internal/dtos"
-	"github.com/stasdashkevitch/crypto_info/internal/usecase"
+	registrationusecase "github.com/stasdashkevitch/crypto_info/internal/usecase/registrationUsecase"
 	"go.uber.org/zap"
 )
 
 type registrationHandler struct {
-	usecase usecase.RegistrationService
+	usecase registrationusecase.RegistrationUsecase
 	logger  *zap.SugaredLogger
 }
 
-func NewRegistrationHandler(handler *http.ServeMux, logger *zap.SugaredLogger, usecase usecase.RegistrationService) {
+func NewRegistrationHandler(handler *http.ServeMux, logger *zap.SugaredLogger, usecase registrationusecase.RegistrationUsecase) {
 	h := &registrationHandler{
 		usecase: usecase,
 		logger:  logger,
@@ -23,21 +23,23 @@ func NewRegistrationHandler(handler *http.ServeMux, logger *zap.SugaredLogger, u
 }
 
 func (h *registrationHandler) Registration(w http.ResponseWriter, r *http.Request) {
-	h.logger.Info("дошло до репы")
+	h.logger.Infow("Recieved request: ",
+		"method", r.Method,
+		"url", r.URL)
 	var req dtos.RegisterUserDTO
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, "invalid input", http.StatusBadRequest)
+		h.logger.Error("Invalid input: ", err)
+		http.Error(w, "Invalid input", http.StatusBadRequest)
 		return
 	}
 
 	defer r.Body.Close()
-	h.logger.Info("дошло до usecase")
 
 	err := h.usecase.Register(req)
 
 	if err != nil {
-		h.logger.Error(err)
-		http.Error(w, err.Error(), http.StatusUnauthorized)
+		h.logger.Error("Failed to registr: ", err)
+		http.Error(w, "Failed to registr", http.StatusUnauthorized)
 		return
 	}
 

@@ -15,18 +15,6 @@ func NewUserPostgresRepository(db database.Database) *userPostgresRepository {
 	}
 }
 
-func (r *userPostgresRepository) GetByUsername(username string) (*entity.User, error) {
-	var user entity.User
-	query := "select id, username, email, password_hash, created_at from users where username = $1"
-	err := r.db.GetDB().QueryRow(query, username).Scan(&user.ID, &user.Username, &user.Email, &user.PasswordHash, &user.CreatedAt)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return &user, nil
-}
-
 func (r *userPostgresRepository) GetByEmail(email string) (*entity.User, error) {
 	var user entity.User
 	query := "select id, username, email, password_hash, created_at from users where email = $1"

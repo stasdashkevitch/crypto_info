@@ -21,7 +21,7 @@ var (
 
 func NewPostgresDatabase(cfg *config.Config) database.Database {
 	once.Do(func() {
-		dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=%s TimeZone=%s",
+		dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s TimeZone=%s",
 			cfg.DB.Host,
 			cfg.DB.User,
 			cfg.DB.Password,
@@ -30,7 +30,6 @@ func NewPostgresDatabase(cfg *config.Config) database.Database {
 			cfg.DB.SSLMode,
 			cfg.DB.Timezone,
 		)
-		fmt.Print(dsn)
 
 		db, err := sql.Open("postgres", dsn)
 

@@ -1,4 +1,4 @@
-package usecase
+package registrationusecase
 
 import (
 	"errors"
@@ -11,17 +11,17 @@ import (
 	"github.com/stasdashkevitch/crypto_info/pkg/password"
 )
 
-type RegistrationService struct {
+type RegistrationUsecase struct {
 	repository repository.UserRepository
 }
 
-func NewRegistrationUsecase(repository repository.UserRepository) *RegistrationService {
-	return &RegistrationService{
+func NewRegistrationUsecase(repository repository.UserRepository) *RegistrationUsecase {
+	return &RegistrationUsecase{
 		repository: repository,
 	}
 }
 
-func (u *RegistrationService) Register(dto dtos.RegisterUserDTO) error {
+func (u *RegistrationUsecase) Register(dto dtos.RegisterUserDTO) error {
 	if dto.Username == "" || dto.Email == "" || dto.Password == "" {
 		return errors.New("Username, email, password are required")
 	}

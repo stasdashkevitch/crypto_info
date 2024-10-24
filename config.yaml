@@ -7,11 +7,15 @@ server:
   write_timeout: 4
   idle_timeout: 100
 db:
-  host: postgres
+  host: localhost
   port: 5432
   user: crypto_info
   password: 123456
   dbname: crypto_info
   sslmode: disable
   timezone: Europe/Minsk
-
+cache:
+  host: localhost
+  port: 6379
+  password: 123456
+  db: 0
