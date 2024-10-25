@@ -8,16 +8,16 @@ import (
 	"github.com/stasdashkevitch/crypto_info/internal/config"
 )
 
-type redisDatabase struct {
+type RedisDatabase struct {
 	DB *redis.Client
 }
 
 var (
 	once       sync.Once
-	dbInstance *redisDatabase
+	dbInstance *RedisDatabase
 )
 
-func NewRedisDatabase(cfg *config.Config) *redisDatabase {
+func NewRedisDatabase(cfg *config.Config) *RedisDatabase {
 	once.Do(func() {
 		addr := fmt.Sprintf("%s:%s", cfg.Cache.Host, cfg.Cache.Port)
 
@@ -27,7 +27,7 @@ func NewRedisDatabase(cfg *config.Config) *redisDatabase {
 			DB:       cfg.Cache.DB,
 		})
 
-		dbInstance = &redisDatabase{
+		dbInstance = &RedisDatabase{
 			DB: client,
 		}
 	})
@@ -35,6 +35,6 @@ func NewRedisDatabase(cfg *config.Config) *redisDatabase {
 	return nil
 }
 
-func (db *redisDatabase) GetDB() *redis.Client {
+func (db *RedisDatabase) GetDB() *redis.Client {
 	return dbInstance.DB
 }

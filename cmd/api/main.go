@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/stasdashkevitch/crypto_info/internal/cache/redis"
 	"github.com/stasdashkevitch/crypto_info/internal/config"
 	database "github.com/stasdashkevitch/crypto_info/internal/database/postgres"
 	v1 "github.com/stasdashkevitch/crypto_info/internal/server/http/v1"
@@ -20,6 +21,8 @@ func main() {
 
 	db := database.NewPostgresDatabase(cfg)
 
-	v1.NewStandartHTTPServer(cfg, l, db).Start()
+	cache := redis.NewRedisDatabase(cfg)
+
+	v1.NewStandartHTTPServer(cfg, l, db, cache).Start()
 
 }

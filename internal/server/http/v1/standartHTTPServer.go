@@ -9,6 +9,7 @@ import (
 
 	"github.com/stasdashkevitch/crypto_info/internal/adapters/controller/http/v1/standart"
 	"github.com/stasdashkevitch/crypto_info/internal/adapters/repository/postgres"
+	"github.com/stasdashkevitch/crypto_info/internal/cache/redis"
 	"github.com/stasdashkevitch/crypto_info/internal/config"
 	"github.com/stasdashkevitch/crypto_info/internal/database"
 	"github.com/stasdashkevitch/crypto_info/internal/usecase/auth"
@@ -22,6 +23,7 @@ type standartHTTPServer struct {
 	db     database.Database
 	cfg    *config.Config
 	l      *zap.SugaredLogger
+	cache  *redis.RedisDatabase
 }
 
 func (s *standartHTTPServer) Start() {
@@ -45,6 +47,11 @@ func (s *standartHTTPServer) Start() {
 		s.l.Error("Database closing error: ", err)
 	}
 
+	err = s.cache.GetDB().Close()
+	if err != nil {
+		s.l.Error("Cache database closing error: ", err)
+	}
+
 	s.l.Info("Shutdown")
 	s.server.Shutdown(tc)
 }
@@ -53,7 +60,7 @@ func (s *standartHTTPServer) getServer() *http.Handler {
 	return &s.server.Handler
 }
 
-func NewStandartHTTPServer(cfg *config.Config, l *zap.SugaredLogger, db database.Database) Server {
+func NewStandartHTTPServer(cfg *config.Config, l *zap.SugaredLogger, db database.Database, cache *redis.RedisDatabase) Server {
 	sm := http.NewServeMux()
 
 	regisеringRoute(sm, l, db)
@@ -71,6 +78,7 @@ func NewStandartHTTPServer(cfg *config.Config, l *zap.SugaredLogger, db database
 		db:     db,
 		cfg:    cfg,
 		l:      l,
+		cache:  cache,
 	}
 }
 
