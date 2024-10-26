@@ -2,29 +2,36 @@ package cryptotrackerusecase
 
 import (
 	"context"
-	"errors"
+	"encoding/json"
+	"fmt"
 
-	"github.com/stasdashkevitch/crypto_info/internal/entity"
-	"github.com/stasdashkevitch/crypto_info/internal/usecase/repository"
+	cryptodataprovider "github.com/stasdashkevitch/crypto_info/internal/usecase/cryptoDataProvider"
+	pubsub "github.com/stasdashkevitch/crypto_info/internal/usecase/pub_sub"
 )
 
 type CryptoTrackerUsecase struct {
-	repository repository.CryptoDatarepository
+	cryptoDataProvider cryptodataprovider.CryptoDataProvider
+	pubsub             pubsub.CryptoTrackerPubSub
 }
 
-func NewCryptoTrackerUsecase(repository repository.CryptoDatarepository) *CryptoTrackerUsecase {
+func NewCryptoTrackerUsecase(cryptoDataProvider cryptodataprovider.CryptoDataProvider, pubsub pubsub.CryptoTrackerPubSub) *CryptoTrackerUsecase {
 	return &CryptoTrackerUsecase{
-		repository: repository,
+		cryptoDataProvider: cryptoDataProvider,
+		pubsub:             pubsub,
 	}
 }
 
-func (u *CryptoTrackerUsecase) GetCryptoData(ctx context.Context, id string) (*entity.CryptoData, error) {
-	data, err := u.repository.GetCrpytoData(id)
-
-	if err == nil && data != nil {
-		return data, nil
+func (u *CryptoTrackerUsecase) UpdateCryptoDataPrice(ctx context.Context, id string) error {
+	data, err := u.cryptoDataProvider.GetCryptoDataPrice(ctx, id)
+	if err != nil {
+		return fmt.Errorf("Failed to retriev data: %v", err)
 	}
 
-	// TODO
-	// externalData, err
+	jsonData, _ := json.Marshal(data)
+
+	return u.pubsub.Publish(ctx, "crypto_price_updates", jsonData)
+}
+
+func (u *CryptoTrackerUsecase) SubscribeCryptoDataPrice(ctx context.Context) (<-chan []byte, error) {
+	return u.pubsub.Subscribe(ctx, "crypto_price_updates")
 }

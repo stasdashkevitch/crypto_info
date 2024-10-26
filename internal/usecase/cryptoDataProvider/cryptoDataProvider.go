@@ -7,5 +7,5 @@ import (
 )
 
 type CryptoDataProvider interface {
-	GetCryptoData(ctx context.Context, id string) (*entity.CryptoData, error)
+	GetCryptoDataPrice(ctx context.Context, id string) (*entity.CryptoDataPrice, error)
 }

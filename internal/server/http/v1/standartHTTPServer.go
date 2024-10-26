@@ -8,11 +8,15 @@ import (
 	"time"
 
 	"github.com/stasdashkevitch/crypto_info/internal/adapters/controller/http/v1/standart"
+	"github.com/stasdashkevitch/crypto_info/internal/adapters/controller/websocket"
+	redispubsub "github.com/stasdashkevitch/crypto_info/internal/adapters/pubsub/redisPubSub"
 	"github.com/stasdashkevitch/crypto_info/internal/adapters/repository/postgres"
 	"github.com/stasdashkevitch/crypto_info/internal/cache/redis"
 	"github.com/stasdashkevitch/crypto_info/internal/config"
 	"github.com/stasdashkevitch/crypto_info/internal/database"
 	"github.com/stasdashkevitch/crypto_info/internal/usecase/auth"
+	cryptodataprovider "github.com/stasdashkevitch/crypto_info/internal/usecase/cryptoDataProvider"
+	cryptotrackerusecase "github.com/stasdashkevitch/crypto_info/internal/usecase/cryptoTrackerUsecase"
 	loginusecase "github.com/stasdashkevitch/crypto_info/internal/usecase/loginUsecase"
 	registrationusecase "github.com/stasdashkevitch/crypto_info/internal/usecase/registrationUsecase"
 	"go.uber.org/zap"
@@ -63,7 +67,7 @@ func (s *standartHTTPServer) getServer() *http.Handler {
 func NewStandartHTTPServer(cfg *config.Config, l *zap.SugaredLogger, db database.Database, cache *redis.RedisDatabase) Server {
 	sm := http.NewServeMux()
 
-	regisеringRoute(sm, l, db)
+	regisеringRoute(sm, l, db, cache)
 
 	s := &http.Server{
 		Handler:      sm,
@@ -82,7 +86,7 @@ func NewStandartHTTPServer(cfg *config.Config, l *zap.SugaredLogger, db database
 	}
 }
 
-func regisеringRoute(sm *http.ServeMux, l *zap.SugaredLogger, db database.Database) {
+func regisеringRoute(sm *http.ServeMux, l *zap.SugaredLogger, db database.Database, cache *redis.RedisDatabase) {
 	userRepository := postgres.NewUserPostgresRepository(db)
 
 	// login route
@@ -93,4 +97,11 @@ func regisеringRoute(sm *http.ServeMux, l *zap.SugaredLogger, db database.Datab
 	// registration route
 	registrationUsecase := registrationusecase.NewRegistrationUsecase(userRepository)
 	standart.NewRegistrationHandler(sm, l, *registrationUsecase)
+
+	// crypto price info
+	cryptoTrackerRedisPubSub := redispubsub.NewCryptoTrackerRedisPubSub(cache.GetDB())
+	cryptoDataProvider := cryptodataprovider.NewCryptoDataFromCoinGeckoProvide()
+	cryptoTrackerUsecase := cryptotrackerusecase.NewCryptoTrackerUsecase(cryptoDataProvider, cryptoTrackerRedisPubSub)
+	websocket.NewCryptoTrackerWebsocketHandler(sm, l, *cryptoTrackerUsecase)
+
 }
