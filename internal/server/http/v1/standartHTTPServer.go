@@ -67,7 +67,7 @@ func (s *standartHTTPServer) getServer() *http.Handler {
 func NewStandartHTTPServer(cfg *config.Config, l *zap.SugaredLogger, db database.Database, cache *redis.RedisDatabase) Server {
 	sm := http.NewServeMux()
 
-	regisеringRoute(sm, l, db, cache)
+	registеringRoute(sm, l, db, cache)
 
 	s := &http.Server{
 		Handler:      sm,
@@ -86,7 +86,7 @@ func NewStandartHTTPServer(cfg *config.Config, l *zap.SugaredLogger, db database
 	}
 }
 
-func regisеringRoute(sm *http.ServeMux, l *zap.SugaredLogger, db database.Database, cache *redis.RedisDatabase) {
+func registеringRoute(sm *http.ServeMux, l *zap.SugaredLogger, db database.Database, cache *redis.RedisDatabase) {
 	userRepository := postgres.NewUserPostgresRepository(db)
 
 	// login route
