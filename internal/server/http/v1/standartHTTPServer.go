@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/stasdashkevitch/crypto_info/internal/adapter/controller/http/v1/standart"
-	"github.com/stasdashkevitch/crypto_info/internal/adapter/controller/websocket"
+	gorillawebsocket "github.com/stasdashkevitch/crypto_info/internal/adapter/controller/websocket/gorillaWebSocket"
 	redispubsub "github.com/stasdashkevitch/crypto_info/internal/adapter/pubsub/redisPubSub"
 	"github.com/stasdashkevitch/crypto_info/internal/adapter/repository/postgres"
 	"github.com/stasdashkevitch/crypto_info/internal/adapter/service/auth"
@@ -102,6 +102,6 @@ func regisеringRoute(sm *http.ServeMux, l *zap.SugaredLogger, db database.Datab
 	cryptoTrackerRedisPubSub := redispubsub.NewCryptoTrackerRedisPubSub(cache.GetDB())
 	cryptoDataProvider := cryptodataprovider.NewCryptoDataFromCoinGeckoProvide()
 	cryptoTrackerUsecase := cryptotrackerusecase.NewCryptoTrackerUsecase(cryptoDataProvider, cryptoTrackerRedisPubSub)
-	websocket.NewCryptoTrackerWebsocketHandler(sm, l, *cryptoTrackerUsecase)
+	gorillawebsocket.NewCryptoTrackerWebsocketHandler(sm, l, *cryptoTrackerUsecase)
 
 }

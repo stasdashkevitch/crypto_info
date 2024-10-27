@@ -1,4 +1,4 @@
-package websocket
+package gorillawebsocket
 
 import (
 	"context"
