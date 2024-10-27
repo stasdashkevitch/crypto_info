@@ -3,7 +3,7 @@ package registrationusecase
 import (
 	"testing"
 
-	"github.com/stasdashkevitch/crypto_info/internal/dtos"
+	"github.com/stasdashkevitch/crypto_info/internal/dto"
 	"github.com/stasdashkevitch/crypto_info/internal/entity"
 	repositorymock "github.com/stasdashkevitch/crypto_info/internal/usecase/mock/repositoryMock"
 )
@@ -23,12 +23,12 @@ func TestRegistrationUsecase(t *testing.T) {
 
 	cases := []struct {
 		Description string
-		UserData    dtos.RegisterUserDTO
+		UserData    dto.RegisterUserDTO
 		Error       string
 	}{
 		{
 			"Succesfull user creation",
-			dtos.RegisterUserDTO{
+			dto.RegisterUserDTO{
 				Email:    "example@gmail.com",
 				Username: "Ivan",
 				Password: "aaa",
@@ -37,14 +37,14 @@ func TestRegistrationUsecase(t *testing.T) {
 		},
 		{
 			"Without one of the fields",
-			dtos.RegisterUserDTO{
+			dto.RegisterUserDTO{
 				Email: "example@gmail.com",
 			},
 			"Username, email, password are required",
 		},
 		{
 			"User already exists",
-			dtos.RegisterUserDTO{
+			dto.RegisterUserDTO{
 				Email:    "exists@gmail.com",
 				Username: "Ivan",
 				Password: "aaa",
@@ -63,5 +63,4 @@ func TestRegistrationUsecase(t *testing.T) {
 
 		})
 	}
-
 }

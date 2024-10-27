@@ -4,7 +4,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/stasdashkevitch/crypto_info/internal/dtos"
+	"github.com/stasdashkevitch/crypto_info/internal/dto"
 	"github.com/stasdashkevitch/crypto_info/internal/entity"
 	"github.com/stasdashkevitch/crypto_info/internal/usecase/repository"
 	"github.com/stasdashkevitch/crypto_info/pkg/id"
@@ -21,7 +21,7 @@ func NewRegistrationUsecase(repository repository.UserRepository) *RegistrationU
 	}
 }
 
-func (u *RegistrationUsecase) Register(dto dtos.RegisterUserDTO) error {
+func (u *RegistrationUsecase) Register(dto dto.RegisterUserDTO) error {
 	if dto.Username == "" || dto.Email == "" || dto.Password == "" {
 		return errors.New("Username, email, password are required")
 	}

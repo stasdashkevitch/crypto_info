@@ -3,7 +3,7 @@ package middleware
 import (
 	"net/http"
 
-	"github.com/stasdashkevitch/crypto_info/internal/usecase/auth"
+	"github.com/stasdashkevitch/crypto_info/internal/usecase/service/auth"
 )
 
 func AuthMiddleware(auth auth.Auth, next http.HandlerFunc) http.HandlerFunc {

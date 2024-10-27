@@ -1,4 +1,4 @@
-package dtos
+package dto
 
 type RegisterUserDTO struct {
 	Email    string `json:"email"`

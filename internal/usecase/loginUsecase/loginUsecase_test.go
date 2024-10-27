@@ -3,7 +3,7 @@ package loginusecase
 import (
 	"testing"
 
-	"github.com/stasdashkevitch/crypto_info/internal/dtos"
+	"github.com/stasdashkevitch/crypto_info/internal/dto"
 	"github.com/stasdashkevitch/crypto_info/internal/entity"
 	"github.com/stasdashkevitch/crypto_info/internal/usecase/mock"
 	repositorymock "github.com/stasdashkevitch/crypto_info/internal/usecase/mock/repositoryMock"
@@ -29,13 +29,13 @@ func TestLoginUsecase(t *testing.T) {
 
 	cases := []struct {
 		Description string
-		UserData    dtos.LoginUserDTO
+		UserData    dto.LoginUserDTO
 		Error       string
 		Expected    string
 	}{
 		{
 			"Succesfull login",
-			dtos.LoginUserDTO{
+			dto.LoginUserDTO{
 				Email:    "example@gmail.com",
 				Password: "123",
 			},
@@ -44,7 +44,7 @@ func TestLoginUsecase(t *testing.T) {
 		},
 		{
 			"Invalid password",
-			dtos.LoginUserDTO{
+			dto.LoginUserDTO{
 				Email:    "example@gmail.com",
 				Password: "12",
 			},
@@ -53,7 +53,7 @@ func TestLoginUsecase(t *testing.T) {
 		},
 		{
 			"Non-existent user",
-			dtos.LoginUserDTO{
+			dto.LoginUserDTO{
 				Email:    "",
 				Password: "123",
 			},

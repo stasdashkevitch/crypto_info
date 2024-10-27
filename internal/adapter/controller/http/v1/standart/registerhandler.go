@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/stasdashkevitch/crypto_info/internal/dtos"
+	"github.com/stasdashkevitch/crypto_info/internal/dto"
 	registrationusecase "github.com/stasdashkevitch/crypto_info/internal/usecase/registrationUsecase"
 	"go.uber.org/zap"
 )
@@ -26,7 +26,7 @@ func (h *registrationHandler) Registration(w http.ResponseWriter, r *http.Reques
 	h.logger.Infow("Recieved request: ",
 		"method", r.Method,
 		"url", r.URL)
-	var req dtos.RegisterUserDTO
+	var req dto.RegisterUserDTO
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		h.logger.Error("Invalid input: ", err)
 		http.Error(w, "Invalid input", http.StatusBadRequest)

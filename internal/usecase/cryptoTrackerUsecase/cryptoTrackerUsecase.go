@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	cryptodataprovider "github.com/stasdashkevitch/crypto_info/internal/usecase/cryptoDataProvider"
 	pubsub "github.com/stasdashkevitch/crypto_info/internal/usecase/pub_sub"
+	cryptodataprovider "github.com/stasdashkevitch/crypto_info/internal/usecase/service/cryptoDataProvider"
 )
 
 type CryptoTrackerUsecase struct {

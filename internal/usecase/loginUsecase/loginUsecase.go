@@ -3,9 +3,9 @@ package loginusecase
 import (
 	"errors"
 
-	"github.com/stasdashkevitch/crypto_info/internal/dtos"
-	"github.com/stasdashkevitch/crypto_info/internal/usecase/auth"
+	"github.com/stasdashkevitch/crypto_info/internal/dto"
 	"github.com/stasdashkevitch/crypto_info/internal/usecase/repository"
+	"github.com/stasdashkevitch/crypto_info/internal/usecase/service/auth"
 	"github.com/stasdashkevitch/crypto_info/pkg/password"
 )
 
@@ -21,7 +21,7 @@ func NewLoginUsecase(auth auth.Auth, repository repository.UserRepository) *Logi
 	}
 }
 
-func (s *LoginUsecase) Login(dto dtos.LoginUserDTO) (string, error) {
+func (s *LoginUsecase) Login(dto dto.LoginUserDTO) (string, error) {
 	user, err := s.repository.GetByEmail(dto.Email)
 
 	if err != nil || user == nil {
