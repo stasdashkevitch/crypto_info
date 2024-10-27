@@ -103,5 +103,4 @@ func registеringRoute(sm *http.ServeMux, l *zap.SugaredLogger, db database.Data
 	cryptoDataProvider := cryptodataprovider.NewCryptoDataFromCoinGeckoProvide()
 	cryptoTrackerUsecase := cryptotrackerusecase.NewCryptoTrackerUsecase(cryptoDataProvider, cryptoTrackerRedisPubSub)
 	gorillawebsocket.NewCryptoTrackerWebsocketHandler(sm, l, *cryptoTrackerUsecase)
-
 }
