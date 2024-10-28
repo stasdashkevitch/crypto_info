@@ -49,16 +49,16 @@ func NewPostgresDatabase(cfg *config.Config) database.Database {
 		}
 
 		_, err = db.Exec(`
-    CREATE TABLE IF NOT EXISTS portfolio_items (
-    UserID UUID,
-    CryptoID TEXT NOT NULL,
-    IncreaseThreshold FLOAT,
-    DecreaseThreshold FLOAT,
-    NotifyIncrease BOOLEAN,
-    NotifyDecrease BOOLEAN,
-    NotificationMethod TEXT,
-    PRIMARY KEY (UserID, CryptoID),
-    FOREIGN KEY (UserID) REFERENCES users(id)
+    CREATE TABLE IF NOT EXISTS user_portfolio (
+    user_id UUID,
+    crypto_id TEXT NOT NULL,
+    increase_threshold FLOAT,
+    decrease_threshold FLOAT,
+    notify_increase BOOLEAN,
+    notify_decrease BOOLEAN,
+    notification_method TEXT,
+    PRIMARY KEY (user_id, crypto_id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );`)
 
 		if err != nil {
