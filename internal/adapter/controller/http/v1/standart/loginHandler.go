@@ -10,11 +10,11 @@ import (
 )
 
 type loginHandler struct {
-	usecase loginusecase.LoginUsecase
+	usecase *loginusecase.LoginUsecase
 	logger  *zap.SugaredLogger
 }
 
-func NewLoginHandler(handler *http.ServeMux, logger *zap.SugaredLogger, usecase loginusecase.LoginUsecase) {
+func NewLoginHandler(handler *http.ServeMux, logger *zap.SugaredLogger, usecase *loginusecase.LoginUsecase) {
 	h := &loginHandler{
 		usecase: usecase,
 		logger:  logger,

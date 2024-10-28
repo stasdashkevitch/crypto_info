@@ -19,6 +19,7 @@ import (
 	cryptotrackerusecase "github.com/stasdashkevitch/crypto_info/internal/usecase/cryptoTrackerUsecase"
 	loginusecase "github.com/stasdashkevitch/crypto_info/internal/usecase/loginUsecase"
 	registrationusecase "github.com/stasdashkevitch/crypto_info/internal/usecase/registrationUsecase"
+	userportfoliousecase "github.com/stasdashkevitch/crypto_info/internal/usecase/userPortfolioUsecase"
 	"go.uber.org/zap"
 )
 
@@ -92,15 +93,20 @@ func registеringRoute(sm *http.ServeMux, l *zap.SugaredLogger, db database.Data
 	// login route
 	auth := auth.NewJWTAuth()
 	loginUsecase := loginusecase.NewLoginUsecase(auth, userRepository)
-	standart.NewLoginHandler(sm, l, *loginUsecase)
+	standart.NewLoginHandler(sm, l, loginUsecase)
 
 	// registration route
 	registrationUsecase := registrationusecase.NewRegistrationUsecase(userRepository)
-	standart.NewRegistrationHandler(sm, l, *registrationUsecase)
+	standart.NewRegistrationHandler(sm, l, registrationUsecase)
 
 	// crypto price info
 	cryptoTrackerRedisPubSub := redispubsub.NewCryptoTrackerRedisPubSub(cache.GetDB())
 	cryptoDataProvider := cryptodataprovider.NewCryptoDataFromCoinGeckoProvide()
 	cryptoTrackerUsecase := cryptotrackerusecase.NewCryptoTrackerUsecase(cryptoDataProvider, cryptoTrackerRedisPubSub)
-	gorillawebsocket.NewCryptoTrackerWebsocketHandler(sm, l, *cryptoTrackerUsecase)
+	gorillawebsocket.NewCryptoTrackerWebsocketHandler(sm, l, cryptoTrackerUsecase)
+
+	//user portfolio
+	userPortfolioRepository := postgres.NewUserPortfolioPostgresRepository(db)
+	userPortfolioUsecase := userportfoliousecase.NewUserPortfolioUsecase(userPortfolioRepository)
+	standart.NewUserPortfolioHandler(sm, l, userPortfolioUsecase)
 }

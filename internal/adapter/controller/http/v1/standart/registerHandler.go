@@ -10,11 +10,11 @@ import (
 )
 
 type registrationHandler struct {
-	usecase registrationusecase.RegistrationUsecase
+	usecase *registrationusecase.RegistrationUsecase
 	logger  *zap.SugaredLogger
 }
 
-func NewRegistrationHandler(handler *http.ServeMux, logger *zap.SugaredLogger, usecase registrationusecase.RegistrationUsecase) {
+func NewRegistrationHandler(handler *http.ServeMux, logger *zap.SugaredLogger, usecase *registrationusecase.RegistrationUsecase) {
 	h := &registrationHandler{
 		usecase: usecase,
 		logger:  logger,

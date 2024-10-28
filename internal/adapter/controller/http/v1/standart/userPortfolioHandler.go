@@ -18,7 +18,7 @@ type response struct {
 	response map[string]string
 }
 
-func NewUserPortfolioHandler(handler *http.ServeMux, usecase *userportfoliousecase.UserPortfolioUsecase, logger *zap.SugaredLogger) {
+func NewUserPortfolioHandler(handler *http.ServeMux, logger *zap.SugaredLogger, usecase *userportfoliousecase.UserPortfolioUsecase) {
 	h := &userPortfolioHandler{
 		usecase: usecase,
 		logger:  logger,
@@ -27,7 +27,7 @@ func NewUserPortfolioHandler(handler *http.ServeMux, usecase *userportfoliouseca
 	handler.HandleFunc("POST /api/portfolio", h.CreateUserPortfolio)
 	handler.HandleFunc("GET /api/portfolio/{user_id}", h.GetAllUserPortfolio)
 	handler.HandleFunc("GET /api/portfolio/{user_id}/{crypto_id}", h.GetUserPortfolioByCryptoID)
-	handler.HandleFunc("PUT /api/portfolio/", h.UpdateUserPortfolio)
+	handler.HandleFunc("PUT /api/portfolio", h.UpdateUserPortfolio)
 	handler.HandleFunc("DELETE /api/portfolio/{user_id}/{crypto_id}", h.DeleteUserPortfolio)
 }
 

@@ -1,9 +1,6 @@
 package postgres
 
 import (
-	"fmt"
-
-	"github.com/pelletier/go-toml/query"
 	"github.com/stasdashkevitch/crypto_info/internal/database"
 	"github.com/stasdashkevitch/crypto_info/internal/entity"
 )
@@ -48,7 +45,6 @@ func (r *userPortfolioPostgresRepository) Create(userPortfolio *entity.UserPortf
 }
 
 func (r *userPortfolioPostgresRepository) GetAllByUserID(userID string) ([]*entity.UserPortfolio, error) {
-	var allUserPortfolio []*entity.UserPortfolio
 	query := `
   SELECT 
     user_id, 
@@ -58,16 +54,18 @@ func (r *userPortfolioPostgresRepository) GetAllByUserID(userID string) ([]*enti
     notify_increase,
     notify_decrease,
     notification_method
-  FROM user_portfolio where
+  FROM user_portfolio
   WHERE user_id = $1`
 
 	rows, err := r.db.GetDB().Query(query, userID)
-	defer rows.Close()
 
 	if err != nil {
 		return nil, err
 	}
 
+	defer rows.Close()
+
+	var allUserPortfolio []*entity.UserPortfolio
 	for rows.Next() {
 		var userPortfolio entity.UserPortfolio
 

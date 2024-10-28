@@ -26,9 +26,9 @@ type cryptoTrackerWebSocketHandler struct {
 	mu      sync.Mutex
 }
 
-func NewCryptoTrackerWebsocketHandler(handler *http.ServeMux, logger *zap.SugaredLogger, usecase cryptotrackerusecase.CryptoTrackerUsecase) {
+func NewCryptoTrackerWebsocketHandler(handler *http.ServeMux, logger *zap.SugaredLogger, usecase *cryptotrackerusecase.CryptoTrackerUsecase) {
 	wh := &cryptoTrackerWebSocketHandler{
-		usecase: &usecase,
+		usecase: usecase,
 		logger:  logger,
 		clients: make(map[*websocket.Conn]bool),
 	}
