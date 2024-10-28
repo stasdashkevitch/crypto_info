@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	pubsub "github.com/stasdashkevitch/crypto_info/internal/usecase/pub_sub"
+	"github.com/stasdashkevitch/crypto_info/internal/usecase/pubsub"
 	cryptodataprovider "github.com/stasdashkevitch/crypto_info/internal/usecase/service/cryptoDataProvider"
 )
 

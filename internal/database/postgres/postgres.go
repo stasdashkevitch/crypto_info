@@ -48,6 +48,23 @@ func NewPostgresDatabase(cfg *config.Config) database.Database {
 			panic(err)
 		}
 
+		_, err = db.Exec(`
+    CREATE TABLE IF NOT EXISTS portfolio_items (
+    UserID UUID,
+    CryptoID TEXT NOT NULL,
+    IncreaseThreshold FLOAT,
+    DecreaseThreshold FLOAT,
+    NotifyIncrease BOOLEAN,
+    NotifyDecrease BOOLEAN,
+    NotificationMethod TEXT,
+    PRIMARY KEY (UserID, CryptoID),
+    FOREIGN KEY (UserID) REFERENCES users(id)
+);`)
+
+		if err != nil {
+			panic(err)
+		}
+
 		dbInstance = &postgresDatabase{
 			Db: db,
 		}
