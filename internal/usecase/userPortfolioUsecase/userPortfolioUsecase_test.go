@@ -24,7 +24,7 @@ func TestUserPortfolioUsecase(t *testing.T) {
 	mockRepo.Create(goodUserPortfolio)
 	usecase := NewUserPortfolioUsecase(mockRepo)
 
-	t.Run("Test for create function", func(t *testing.T) {
+	t.Run("Test for create and update functions", func(t *testing.T) {
 		cases := []struct {
 			Description   string
 			UserPortfolio *entity.UserPortfolio
@@ -86,10 +86,16 @@ func TestUserPortfolioUsecase(t *testing.T) {
 
 		for _, test := range cases {
 			t.Run(test.Description, func(t *testing.T) {
-				got := usecase.CreateUserPortfolio(test.UserPortfolio)
+				gotCreate := usecase.CreateUserPortfolio(test.UserPortfolio)
+				gotUpdate := usecase.UpdateUserPortfolio(test.UserPortfolio)
 
-				if got != nil && (got.Error() != test.Expected) {
-					t.Errorf("Expected %v, but got: %v", test.Expected, got)
+				if gotCreate != nil && (gotCreate.Error() != test.Expected) {
+					t.Errorf("Create: expected %v, but got: %v", test.Expected, gotCreate)
+					return
+				}
+
+				if gotUpdate != nil && (gotUpdate.Error() != test.Expected) {
+					t.Errorf("Create: expected %v, but got: %v", test.Expected, gotUpdate)
 					return
 				}
 			})
