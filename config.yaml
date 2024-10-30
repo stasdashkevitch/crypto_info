@@ -19,3 +19,9 @@ cache:
   port: 6379
   password: 12345
   db: 0
+smtp:
+  smtp_host:
+  smtp_port:
+  username:
+  password:
+  

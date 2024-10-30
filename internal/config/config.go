@@ -30,6 +30,12 @@ type Config struct {
 		Password string `yaml:"password" env-default:"123456"`
 		DB       int    `yaml:"db" env-default:"0"`
 	} `yaml:"cache"`
+	SMTP struct {
+		SMTPHost string `yaml:"smtp_host"`
+		SMTPPort string `yaml:"smtp_port"`
+		Username string `yaml:"username"`
+		Password string `yaml:"password"`
+	} `yaml:"smtp"`
 }
 
 var instance *Config
